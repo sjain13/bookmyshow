@@ -8,7 +8,7 @@
 
 3. Mandatory entities to book a ticket are - user, movie, theater with seats, shows of configured movies in configured theater with seats.
 
-4. Logging is done on console as well as file. Log file can be accessed at `bookmyshow\logs\bookmyshow.log`.
+4. Logging is done on console we can use log4j or logback.xml to create custom logs.
 
 5. Exception Handling is done using ExceptionInterceptor. 
 
@@ -36,7 +36,7 @@ For the simplicity of system, I have made following assumptions while implementi
 
 ## Setting up the data
 
-1. Access the application using swagger on (http://localhost:8080/bms/swagger-ui/swagger-ui/index.html
+1. Access the application using swagger on http://localhost:8080/bms/swagger-ui/swagger-ui/index.html
 
 2. Execute the API `http://localhost:8080/bms/initialize/generate` from swagger inside the heading `data-populator`. This will create a sample user, movie, theater, theater seats, shows, shows seats that will be used in booking ticket.
 
@@ -58,6 +58,26 @@ For the simplicity of system, I have made following assumptions while implementi
   ],
   "showId": 15,
   "userId": 1
+}
+
+4. For Afternoon Discount Policy:
+{
+  "seatsNumbers": [
+    "1D","1B","1C"
+  ],
+  "userId": 1,
+  "showId": 6,
+  "seatType": "CLASSIC"
+}
+
+5. For third Ticket Discounts:
+{
+  "seatsNumbers": [
+    "1D","1B","1C"
+  ],
+  "userId": 1,
+  "showId": 1,
+  "seatType": "CLASSIC"
 }
 
 This will book a ticket for you and you will get ticket id along with show details in response.

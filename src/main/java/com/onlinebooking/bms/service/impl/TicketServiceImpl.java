@@ -28,6 +28,7 @@ import com.onlinebooking.bms.repository.ShowRepository;
 import com.onlinebooking.bms.repository.TicketRepository;
 import com.onlinebooking.bms.repository.UserRepository;
 import com.onlinebooking.bms.service.TicketService;
+import com.onlinebooking.bms.service.impl.DiscountService;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -44,6 +45,9 @@ public class TicketServiceImpl implements TicketService {
 
 	@Autowired
 	private TicketRepository ticketRepository;
+	
+	@Autowired
+	private DiscountService discountService;
 
 	@Override
 	public TicketDto bookTicket(BookTicketRequestDto bookTicketRequestDto) {
@@ -96,13 +100,22 @@ public class TicketServiceImpl implements TicketService {
 
 		double amount = 0.0;
 		String allotedSeats = "";
+		int seatCount = 0;
 
 		for (ShowSeatsEntity seatsEntity : showSeatsEntities) {
 			seatsEntity.setBooked(true);
 			seatsEntity.setBookedAt(new Date());
 			seatsEntity.setTicket(ticketEntity);
+			double seatRate = seatsEntity.getRate();
+        	seatCount++;
 
-			amount += seatsEntity.getRate();
+        	// Apply discounts to each ticket price
+        	seatRate = discountService.applyDiscounts(seatRate, seatCount, optionalShow.get(), ticketEntity);
+
+			log.info("SeatRate for " + seatCount + "tickets: " + seatRate);
+
+			amount += seatRate;
+			
 
 			allotedSeats += seatsEntity.getSeatNumber() + " ";
 		}
